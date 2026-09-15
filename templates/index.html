@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HEAL LINK — AI-Powered Medical Equipment Rental & Home-Care Platform</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased min-h-screen flex flex-col">
+
+  <!-- Top Announcement / Demo Presets Banner -->
+  <div class="bg-slate-900 text-white text-xs py-2 px-4 border-b border-slate-800">
+    <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2">
+      <div class="flex items-center space-x-2">
+        <span class="px-2 py-0.5 rounded text-[10px] font-extrabold bg-teal-500/20 text-teal-300 border border-teal-500/40">DEMO READY</span>
+        <span class="text-slate-300">Quick Presentation Scenarios:</span>
+        <button onclick="triggerDemoScenario(1)" class="hover:text-teal-300 font-semibold underline decoration-teal-400">1. Hip Surgery (45d)</button>
+        <span class="text-slate-600">•</span>
+        <button onclick="triggerDemoScenario(2)" class="hover:text-teal-300 font-semibold underline decoration-teal-400">2. Elderly Care</button>
+        <span class="text-slate-600">•</span>
+        <button onclick="triggerDemoScenario(3)" class="hover:text-teal-300 font-semibold underline decoration-teal-400 text-red-300">3. Emergency 🚨</button>
+        <span class="text-slate-600">•</span>
+        <button onclick="triggerDemoScenario(4)" class="hover:text-teal-300 font-semibold underline decoration-teal-400">4. Respiratory</button>
+      </div>
+      <div class="flex items-center space-x-3">
+        <span id="current-role-badge" class="inline-flex items-center text-xs font-semibold px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">
+          <span class="w-2 h-2 rounded-full bg-emerald-500 mr-2"></span> Patient & Family Mode
+        </span>
+        <div class="flex items-center space-x-1 border border-slate-700 rounded-lg p-0.5 bg-slate-800">
+          <button data-role-btn="patient" class="px-2 py-0.5 rounded text-[11px] font-medium hover:bg-slate-700 text-slate-200">Patient</button>
+          <button data-role-btn="vendor" class="px-2 py-0.5 rounded text-[11px] font-medium hover:bg-slate-700 text-slate-200">Vendor</button>
+          <button data-role-btn="admin" class="px-2 py-0.5 rounded text-[11px] font-medium hover:bg-slate-700 text-slate-200">Admin</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Primary Header & Navigation -->
+  <header class="bg-white border-b border-slate-200 sticky top-0 z-40 shadow-xs">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16">
+        <!-- Logo -->
+        <div class="flex items-center space-x-3 cursor-pointer" onclick="switchView('home')">
+          <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-teal-700 to-teal-500 flex items-center justify-center text-white font-black text-xl shadow-sm">
+            +
+          </div>
+          <div>
+            <div class="flex items-center space-x-1.5">
+              <span class="text-lg font-black tracking-tight text-slate-900">HEAL LINK</span>
+              <span class="text-[10px] font-bold px-1.5 py-0.5 bg-teal-100 text-teal-800 rounded">AI PLATFORM</span>
+            </div>
+            <div class="text-[10px] font-medium text-slate-500 -mt-0.5">Plan. Find. Verify. Rent. Deliver. Return.</div>
+          </div>
+        </div>
+
+        <!-- Navigation Tabs -->
+        <nav class="hidden lg:flex items-center space-x-1">
+          <button data-view-target="home" class="nav-tab text-teal-600 border-b-2 border-teal-600 font-semibold px-3 py-4 text-xs tracking-wide">Home</button>
+          <button data-view-target="marketplace" class="nav-tab text-slate-600 px-3 py-4 text-xs font-medium hover:text-teal-600">Equipment Catalog</button>
+          <button data-view-target="ai-care" class="nav-tab text-slate-600 px-3 py-4 text-xs font-medium hover:text-teal-600 flex items-center">
+            <span class="w-1.5 h-1.5 rounded-full bg-teal-500 mr-1.5"></span> AI Care Twin
+          </button>
+          <button data-view-target="ai-bundle" class="nav-tab text-slate-600 px-3 py-4 text-xs font-medium hover:text-teal-600">AI Bundles</button>
+          <button data-view-target="emergency" class="nav-tab text-red-600 px-3 py-4 text-xs font-bold hover:text-red-700 flex items-center">
+            <span class="w-2 h-2 rounded-full bg-red-600 animate-pulse mr-1"></span> Emergency 🚨
+          </button>
+          <button data-view-target="rent-buy" class="nav-tab text-slate-600 px-3 py-4 text-xs font-medium hover:text-teal-600">Rent vs Buy</button>
+          <button data-view-target="compare" class="nav-tab text-slate-600 px-3 py-4 text-xs font-medium hover:text-teal-600 flex items-center">
+            Compare <span id="compare-count-badge" class="ml-1 px-1.5 py-0.2 rounded-full bg-teal-100 text-teal-800 text-[10px] font-bold" style="display:none;">0</span>
+          </button>
+          <button data-view-target="family" class="nav-tab text-slate-600 px-3 py-4 text-xs font-medium hover:text-teal-600">Family Care</button>
+          <button data-view-target="return-reuse" class="nav-tab text-slate-600 px-3 py-4 text-xs font-medium hover:text-teal-600">Return & Reuse</button>
+        </nav>
+
+        <!-- Right Quick Actions -->
+        <div class="flex items-center space-x-2">
+          <button onclick="switchView('ai-care')" class="hidden sm:inline-flex items-center px-3.5 py-2 rounded-xl text-xs font-semibold bg-teal-50 text-teal-700 hover:bg-teal-100 transition-all border border-teal-200">
+            🤖 Ask AI Care Twin
+          </button>
+          <button onclick="switchView('emergency')" class="inline-flex items-center px-3.5 py-2 rounded-xl text-xs font-bold bg-red-600 hover:bg-red-700 text-white shadow-sm transition-all animate-pulse">
+            🚨 Emergency Swarm
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Views Container -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
+
+    <!-- ================= VIEW 1: HOME ================= -->
+    <section id="view-home" class="view-section space-y-12">
+      <!-- Hero -->
+      <div class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-slate-950 via-slate-900 to-teal-950 text-white p-8 sm:p-12 shadow-xl">
+        <div class="relative z-10 max-w-3xl">
+          <div class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-teal-500/20 text-teal-300 border border-teal-400/30 mb-4">
+            <span class="w-2 h-2 rounded-full bg-teal-400 mr-2"></span> Next-Gen Health-Tech Ecosystem
+          </div>
+          <h1 class="text-3xl sm:text-5xl font-black tracking-tight leading-tight text-white">
+            Smart Medical Equipment Rental, <br><span class="text-transparent bg-clip-text bg-gradient-to-r from-teal-400 to-cyan-300">Simplified by AI.</span>
+          </h1>
+          <p class="mt-4 text-sm sm:text-base text-slate-300 leading-relaxed max-w-2xl">
+            Find, compare, verify and rent certified medical equipment with intelligent care journey planning, 100% transparent pricing, and trusted home delivery.
+          </p>
+
+          <!-- Dual CTAs -->
+          <div class="mt-8 flex flex-wrap items-center gap-3">
+            <button onclick="switchView('marketplace')" class="px-6 py-3.5 rounded-2xl bg-teal-500 hover:bg-teal-400 text-slate-950 font-bold text-sm transition-all shadow-lg hover:shadow-teal-500/25">
+              Find Equipment Catalog →
+            </button>
+            <button onclick="switchView('ai-care')" class="px-6 py-3.5 rounded-2xl bg-white/10 hover:bg-white/15 text-white font-semibold text-sm border border-white/20 backdrop-blur-md transition-all">
+              Try AI Care Assistant ✨
+            </button>
+            <button onclick="switchView('emergency')" class="px-6 py-3.5 rounded-2xl bg-red-600/90 hover:bg-red-600 text-white font-bold text-sm transition-all shadow-lg hover:shadow-red-600/25">
+              🚨 Emergency Assistance
+            </button>
+          </div>
+        </div>
+
+        <!-- 6-Step Visual Lifecycle Bar -->
+        <div class="mt-12 pt-8 border-t border-white/10">
+          <div class="text-[11px] font-bold uppercase tracking-wider text-teal-300 mb-3">Unified Healthcare Lifecycle:</div>
+          <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3 text-center">
+            <div class="p-2.5 rounded-xl bg-white/5 border border-white/10">
+              <div class="text-xs font-bold text-white">1. PLAN</div>
+              <div class="text-[10px] text-slate-400">AI Care Twin</div>
+            </div>
+            <div class="p-2.5 rounded-xl bg-white/5 border border-white/10">
+              <div class="text-xs font-bold text-white">2. FIND</div>
+              <div class="text-[10px] text-slate-400">Verified Vendors</div>
+            </div>
+            <div class="p-2.5 rounded-xl bg-white/5 border border-white/10">
+              <div class="text-xs font-bold text-white">3. COMPARE</div>
+              <div class="text-[10px] text-slate-400">Price & Trust</div>
+            </div>
+            <div class="p-2.5 rounded-xl bg-white/5 border border-white/10">
+              <div class="text-xs font-bold text-white">4. VERIFY</div>
+              <div class="text-[10px] text-slate-400">QR Health Passport</div>
+            </div>
+            <div class="p-2.5 rounded-xl bg-white/5 border border-white/10">
+              <div class="text-xs font-bold text-white">5. DELIVER</div>
+              <div class="text-[10px] text-slate-400">Setup & Demo</div>
+            </div>
+            <div class="p-2.5 rounded-xl bg-white/5 border border-white/10">
+              <div class="text-xs font-bold text-white">6. RETURN</div>
+              <div class="text-[10px] text-slate-400">Sanitized & Reused</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Core USPs Grid -->
+      <div>
+        <div class="text-center max-w-2xl mx-auto mb-8">
+          <span class="text-xs font-bold text-teal-600 uppercase tracking-wider">Built for Patients & Families</span>
+          <h2 class="text-2xl sm:text-3xl font-bold text-slate-900 mt-1">Why Choose HEAL LINK?</h2>
+          <p class="text-xs text-slate-500 mt-2">Solving fragmentation, hygiene mistrust, and hidden fees in medical home care.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="bg-white p-6 rounded-3xl border border-slate-200/80 shadow-xs card-hover">
+            <div class="w-12 h-12 rounded-2xl bg-teal-50 border border-teal-200 flex items-center justify-center text-teal-700 text-xl font-bold mb-4">
+              🧬
+            </div>
+            <h3 class="text-base font-bold text-slate-900">AI Care Journey Twin</h3>
+            <p class="text-xs text-slate-600 mt-2 leading-relaxed">
+              Describe your patient situation in plain English. The platform projects multi-week recovery timelines, milestone equipment, and return reminders.
+            </p>
+            <button onclick="switchView('ai-care')" class="mt-4 text-xs font-semibold text-teal-700 hover:text-teal-800">
+              Launch Care Twin →
+            </button>
+          </div>
+
+          <div class="bg-white p-6 rounded-3xl border border-slate-200/80 shadow-xs card-hover">
+            <div class="w-12 h-12 rounded-2xl bg-emerald-50 border border-emerald-200 flex items-center justify-center text-emerald-700 text-xl font-bold mb-4">
+              ★
+            </div>
+            <h3 class="text-base font-bold text-slate-900">Equipment Trust Score & QR</h3>
+            <p class="text-xs text-slate-600 mt-2 leading-relaxed">
+              Every unit carries an auditable Trust Score (e.g. 96/100) and scanable digital QR Health Passport verifying recent disinfection and 14-point tests.
+            </p>
+            <button onclick="openQrPassportModal('HL-OXY-1024')" class="mt-4 text-xs font-semibold text-teal-700 hover:text-teal-800">
+              Inspect Sample Passport →
+            </button>
+          </div>
+
+          <div class="bg-white p-6 rounded-3xl border border-slate-200/80 shadow-xs card-hover">
+            <div class="w-12 h-12 rounded-2xl bg-blue-50 border border-blue-200 flex items-center justify-center text-blue-700 text-xl font-bold mb-4">
+              🏷️
+            </div>
+            <h3 class="text-base font-bold text-slate-900">100% Transparent Pricing</h3>
+            <p class="text-xs text-slate-600 mt-2 leading-relaxed">
+              Zero "Call for Price". See Daily, Weekly, and Monthly rental rates up-front, plus itemized delivery, installation, pickup, and refundable deposit.
+            </p>
+            <button onclick="switchView('marketplace')" class="mt-4 text-xs font-semibold text-teal-700 hover:text-teal-800">
+              View Catalog Pricing →
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= VIEW 2: EQUIPMENT CATALOGUE ================= -->
+    <section id="view-marketplace" class="view-section hidden space-y-6">
+      <div class="flex flex-wrap items-center justify-between gap-4 pb-4 border-b border-slate-200">
+        <div>
+          <h2 class="text-2xl font-bold text-slate-900">Medical Equipment Marketplace</h2>
+          <p class="text-xs text-slate-500 mt-0.5">Explore certified medical-grade equipment with transparent daily, weekly, and monthly rates.</p>
+        </div>
+
+        <!-- Search & Sort Controls -->
+        <div class="flex flex-wrap items-center gap-3">
+          <div class="relative">
+            <input type="text" id="market-search-input" placeholder="Search equipment or brand..." 
+                   oninput="loadEquipment(state.currentCategory, this.value, state.sortBy)"
+                   class="w-64 pl-8 pr-4 py-2 text-xs border border-slate-200 rounded-xl bg-white focus:ring-2 focus:ring-teal-500 outline-none">
+            <span class="absolute left-2.5 top-2.5 text-slate-400 text-xs">🔍</span>
+          </div>
+
+          <select id="market-sort-select" onchange="loadEquipment(state.currentCategory, state.searchQuery, this.value)" 
+                  class="px-3 py-2 text-xs border border-slate-200 rounded-xl bg-white focus:ring-2 focus:ring-teal-500 outline-none">
+            <option value="trust_desc">Highest Trust Score</option>
+            <option value="price_asc">Lowest Price (Daily)</option>
+            <option value="price_desc">Highest Price</option>
+            <option value="eta_asc">Fastest Delivery (ETA)</option>
+            <option value="distance_asc">Nearest Distance</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Category Filter Pills -->
+      <div id="category-pills-container" class="flex items-center space-x-2 overflow-x-auto pb-2 scrollbar-none">
+      </div>
+
+      <!-- Equipment Grid -->
+      <div id="equipment-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 pt-2">
+      </div>
+    </section>
+
+    <!-- ================= VIEW 3: AI CARE ASSISTANT ================= -->
+    <section id="view-ai-care" class="view-section hidden space-y-6">
+      <div class="max-w-4xl mx-auto space-y-6">
+        <div class="text-center max-w-2xl mx-auto">
+          <span class="text-xs font-bold text-teal-600 uppercase tracking-wider">USP 1 • AI Care Journey Twin</span>
+          <h2 class="text-2xl sm:text-3xl font-bold text-slate-900 mt-1">Personalized Home Care Planner</h2>
+          <p class="text-xs text-slate-500 mt-1">Describe your loved one's medical or surgical recovery situation. Our clinical logic maps equipment by recovery phase.</p>
+        </div>
+
+        <!-- Chat / Natural Language Form -->
+        <div class="bg-white p-4 sm:p-6 rounded-3xl border border-slate-200 shadow-sm">
+          <form id="care-form" class="space-y-3">
+            <div class="relative">
+              <textarea id="care-input" rows="3" required
+                        placeholder="e.g. My father had hip surgery and needs home recovery for 45 days. We need equipment to prevent falls and assist walking."
+                        class="w-full p-4 text-xs sm:text-sm border border-slate-200 rounded-2xl focus:ring-2 focus:ring-teal-500 outline-none pr-12"></textarea>
+              
+              <!-- Simulated Voice Assistant Microphone -->
+              <button type="button" id="voice-mic-btn" title="Tap to Speak"
+                      class="absolute right-3 bottom-3 p-2.5 rounded-xl bg-slate-100 hover:bg-teal-50 text-slate-600 hover:text-teal-700 transition-all text-xs font-bold flex items-center space-x-1">
+                <span>🎤</span>
+                <span class="text-[10px] hidden sm:inline">Tap to Speak</span>
+              </button>
+            </div>
+
+            <div class="flex flex-wrap items-center justify-between gap-3 pt-2">
+              <div class="flex items-center space-x-2 text-[11px] text-slate-500">
+                <span>Try quick query:</span>
+                <button type="button" onclick="document.getElementById('care-input').value='My father had hip surgery and needs home recovery for 45 days.'; submitCareQuery(document.getElementById('care-input').value);" class="text-teal-700 hover:underline font-medium">Hip Surgery (45d)</button>
+                <span>•</span>
+                <button type="button" onclick="document.getElementById('care-input').value='Patient recovering from pneumonia requiring oxygen concentrator and BiPAP.'; submitCareQuery(document.getElementById('care-input').value);" class="text-teal-700 hover:underline font-medium">Respiratory Support</button>
+              </div>
+
+              <button type="submit" class="px-6 py-2.5 rounded-xl bg-teal-600 hover:bg-teal-700 text-white font-bold text-xs shadow-sm transition-all">
+                Generate Care Journey & Bundle →
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- AI Care Twin Results Container -->
+        <div id="care-twin-results" class="space-y-6">
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= VIEW 4: AI BUNDLES ================= -->
+    <section id="view-ai-bundle" class="view-section hidden space-y-6">
+      <div class="max-w-4xl mx-auto space-y-6">
+        <div class="text-center max-w-2xl mx-auto">
+          <span class="text-xs font-bold text-teal-600 uppercase tracking-wider">USP 2 • Bundled Care Savings</span>
+          <h2 class="text-2xl sm:text-3xl font-bold text-slate-900 mt-1">AI Equipment Bundle Generator</h2>
+          <p class="text-xs text-slate-500 mt-1">Curated synergistic packages designed by medical specialists with bundled discounts up to 25%.</p>
+        </div>
+
+        <!-- Bundle Switcher Tabs -->
+        <div class="flex items-center justify-center space-x-2 pb-2">
+          <button onclick="loadBundle('post_surgery_bundle')" class="px-4 py-2 rounded-xl text-xs font-bold bg-teal-600 text-white shadow-sm">
+            Post-Surgery Home Care
+          </button>
+          <button onclick="loadBundle('respiratory_bundle')" class="px-4 py-2 rounded-xl text-xs font-bold bg-white border border-slate-200 text-slate-700 hover:bg-slate-50">
+            Respiratory & Pulmonary
+          </button>
+          <button onclick="loadBundle('elderly_care_bundle')" class="px-4 py-2 rounded-xl text-xs font-bold bg-white border border-slate-200 text-slate-700 hover:bg-slate-50">
+            Elderly Fall-Prevention
+          </button>
+        </div>
+
+        <!-- Bundle Display Container -->
+        <div id="bundle-display-area">
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= VIEW 5: EMERGENCY SWARM ================= -->
+    <section id="view-emergency" class="view-section hidden space-y-6">
+      <div class="max-w-4xl mx-auto space-y-6">
+        <!-- Emergency Red Banner -->
+        <div class="bg-gradient-to-r from-red-700 via-rose-800 to-red-900 text-white p-6 sm:p-8 rounded-3xl shadow-lg border border-red-500">
+          <div class="flex items-center space-x-3 mb-2">
+            <span class="w-3 h-3 rounded-full bg-white animate-ping"></span>
+            <span class="text-xs font-extrabold uppercase tracking-widest text-red-200">USP 5 • AI Emergency Equipment Swarm</span>
+          </div>
+          <h2 class="text-2xl sm:text-4xl font-black text-white">Rapid Emergency Medical Equipment Dispatch</h2>
+          <p class="text-xs sm:text-sm text-red-100 mt-2 max-w-2xl leading-relaxed">
+            Real-time proximity matching across certified inventory pools. Compares vendor distance, stock status, and road transit ETA for life-critical equipment.
+          </p>
+        </div>
+
+        <!-- Emergency Inputs -->
+        <div class="bg-white p-6 rounded-3xl border border-red-200 shadow-sm">
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">Critical Equipment Needed</label>
+              <select id="emergency-eq-select" class="w-full px-3 py-2.5 text-xs border border-slate-300 rounded-xl bg-white outline-none focus:ring-2 focus:ring-red-500">
+                <option value="Oxygen Concentrator">Medical Oxygen Concentrator (10 LPM)</option>
+                <option value="Oxygen Cylinder">Jumbo Oxygen Cylinder (47L)</option>
+                <option value="Suction Machine">Clinical Phlegm Suction Unit</option>
+                <option value="BiPAP">ResMed VPAP Auto BiPAP</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">Patient Location / Pincode</label>
+              <input type="text" id="emergency-loc-input" value="Metro Central Zone, Ward 12" class="w-full px-3 py-2.5 text-xs border border-slate-300 rounded-xl outline-none focus:ring-2 focus:ring-red-500">
+            </div>
+
+            <div class="flex items-end">
+              <button onclick="runEmergencySwarm()" class="w-full py-2.5 px-4 bg-red-600 hover:bg-red-700 text-white font-black text-xs rounded-xl transition-all shadow-md">
+                Find Fastest Verified Equipment ⚡
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Swarm Live Ranked Vendors Container -->
+        <div id="emergency-swarm-results">
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= VIEW 6: RENT VS BUY ================= -->
+    <section id="view-rent-buy" class="view-section hidden space-y-6">
+      <div class="max-w-4xl mx-auto space-y-6">
+        <div class="text-center max-w-2xl mx-auto">
+          <span class="text-xs font-bold text-teal-600 uppercase tracking-wider">USP 6 • Financial Intelligence</span>
+          <h2 class="text-2xl sm:text-3xl font-bold text-slate-900 mt-1">AI Rent vs Buy vs Rent-to-Own Calculator</h2>
+          <p class="text-xs text-slate-500 mt-1">Deterministic financial models comparing total rental cost, outright purchase depreciation, and rent-to-own plans.</p>
+        </div>
+
+        <!-- Calculator Inputs -->
+        <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm space-y-4">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">Select Medical Equipment</label>
+              <select id="rent-buy-eq-select" onchange="runRentVsBuy()" class="w-full px-3 py-2 text-xs border border-slate-200 rounded-xl bg-white outline-none">
+                <option value="HL-BED-2048">3-Function Electric ICU Hospital Bed (Buy: ₹62,000)</option>
+                <option value="HL-OXY-1024">Medical Oxygen Concentrator 10L (Buy: ₹58,000)</option>
+                <option value="HL-BIP-4011">ResMed Lumis 150 VPAP Auto BiPAP (Buy: ₹89,000)</option>
+                <option value="HL-WHL-1080">Ultra-Light Deluxe Wheelchair (Buy: ₹12,500)</option>
+              </select>
+            </div>
+
+            <div>
+              <div class="flex justify-between items-center mb-1">
+                <label class="text-xs font-bold text-slate-700">Expected Recovery / Usage Duration</label>
+                <span id="rent-buy-duration-val" class="text-xs font-extrabold text-teal-700">45 Days</span>
+              </div>
+              <input type="range" id="rent-buy-slider" min="7" max="180" value="45" step="1" oninput="runRentVsBuy()"
+                     class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-teal-600">
+              <div class="flex justify-between text-[10px] text-slate-400 mt-1">
+                <span>7 Days (Short)</span>
+                <span>45 Days (Mid)</span>
+                <span>90 Days</span>
+                <span>180 Days (Long-Term)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Calculation Results Container -->
+        <div id="rent-buy-results">
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= VIEW 7: COMPARE MATRIX ================= -->
+    <section id="view-compare" class="view-section hidden space-y-6">
+      <div class="flex flex-wrap items-center justify-between gap-4 pb-4 border-b border-slate-200">
+        <div>
+          <span class="text-xs font-bold text-teal-600 uppercase tracking-wider">USP 8 & 11 • Side-by-Side Comparison</span>
+          <h2 class="text-2xl font-bold text-slate-900 mt-0.5">Multi-Vendor Equipment Comparison</h2>
+          <p class="text-xs text-slate-500">Compare up to 4 medical equipment options side-by-side on price, trust scores, vendor distance, and sanitization.</p>
+        </div>
+
+        <button onclick="state.compareList=[]; renderCompareView();" class="text-xs font-semibold text-slate-500 hover:text-red-600">
+          Reset Comparison Table
+        </button>
+      </div>
+
+      <div id="compare-table-container">
+      </div>
+    </section>
+
+    <!-- ================= VIEW 8: FAMILY CARE DASHBOARD ================= -->
+    <section id="view-family" class="view-section hidden space-y-6">
+      <div class="flex flex-wrap items-center justify-between gap-4 pb-4 border-b border-slate-200">
+        <div>
+          <span class="text-xs font-bold text-teal-600 uppercase tracking-wider">USP 10 & 19 • Family Centric Care</span>
+          <h2 class="text-2xl font-bold text-slate-900 mt-0.5">Family Caregiver Dashboard</h2>
+          <p class="text-xs text-slate-500">Collaborative oversight of patient recovery, equipment countdowns, scheduled clinician visits, and one-click renewals.</p>
+        </div>
+      </div>
+
+      <div id="family-dashboard-content">
+      </div>
+    </section>
+
+    <!-- ================= VIEW 9: RETURN & REUSE INTELLIGENCE ================= -->
+    <section id="view-return-reuse" class="view-section hidden space-y-6">
+      <div class="flex flex-wrap items-center justify-between gap-4 pb-4 border-b border-slate-200">
+        <div>
+          <span class="text-xs font-bold text-teal-600 uppercase tracking-wider">USP 7 & 16 • Circular Economy & Sterilization</span>
+          <h2 class="text-2xl font-bold text-slate-900 mt-0.5">AI Return & Reuse Sanitization Pipeline</h2>
+          <p class="text-xs text-slate-500">Track and advance returned medical equipment through clinical inspection, ultrasonic cleaning, disinfection, and calibration.</p>
+        </div>
+      </div>
+
+      <div id="return-reuse-content">
+      </div>
+    </section>
+
+    <!-- ================= VIEW 10: VENDOR DASHBOARD ================= -->
+    <section id="view-vendor-dash" class="view-section hidden space-y-6">
+      <div class="flex flex-wrap items-center justify-between gap-4 pb-4 border-b border-slate-200">
+        <div>
+          <span class="text-xs font-bold text-blue-600 uppercase tracking-wider">Vendor Operations Portal</span>
+          <h2 class="text-2xl font-bold text-slate-900 mt-0.5">MedEquip Express Central — Inventory Hub</h2>
+          <p class="text-xs text-slate-500">Manage real-time inventory availability, track rented assets, and dispatch pending orders.</p>
+        </div>
+        <button onclick="showToast('Inventory Synced', 'Live telemetry refreshed', 'info')" class="px-3.5 py-2 text-xs font-semibold bg-slate-100 hover:bg-slate-200 rounded-xl text-slate-700">
+          ↻ Refresh Fleet
+        </button>
+      </div>
+
+      <!-- Stats Grid -->
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+        <div class="p-4 bg-white rounded-2xl border border-slate-200 shadow-xs">
+          <div class="text-xs text-slate-500">Total Units</div>
+          <div class="text-2xl font-black text-slate-900 mt-1" id="vendor-stat-total">0</div>
+        </div>
+        <div class="p-4 bg-white rounded-2xl border border-slate-200 shadow-xs">
+          <div class="text-xs text-emerald-600 font-semibold">Available In Stock</div>
+          <div class="text-2xl font-black text-emerald-700 mt-1" id="vendor-stat-available">0</div>
+        </div>
+        <div class="p-4 bg-white rounded-2xl border border-slate-200 shadow-xs">
+          <div class="text-xs text-blue-600 font-semibold">Active Rented</div>
+          <div class="text-2xl font-black text-blue-700 mt-1" id="vendor-stat-rented">0</div>
+        </div>
+        <div class="p-4 bg-white rounded-2xl border border-slate-200 shadow-xs">
+          <div class="text-xs text-amber-600 font-semibold">In Maintenance / Clean</div>
+          <div class="text-2xl font-black text-amber-700 mt-1" id="vendor-stat-maintenance">0</div>
+        </div>
+      </div>
+
+      <!-- Inventory Table -->
+      <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-xs">
+        <div class="p-4 bg-slate-50 border-b border-slate-200 flex items-center justify-between">
+          <h4 class="text-xs font-bold uppercase tracking-wider text-slate-700">Inventory Status & Quick Toggle</h4>
+          <span class="text-[11px] text-slate-500">Changes reflect instantly in customer search</span>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left">
+            <thead>
+              <tr class="text-[11px] font-bold text-slate-400 uppercase bg-slate-50/50 border-b border-slate-100">
+                <th class="p-3">Equipment Name</th>
+                <th class="p-3">Serial No</th>
+                <th class="p-3">Category</th>
+                <th class="p-3">Pricing (Daily/Monthly)</th>
+                <th class="p-3">Trust Score</th>
+                <th class="p-3">Availability Status</th>
+              </tr>
+            </thead>
+            <tbody id="vendor-inventory-table" class="divide-y divide-slate-100">
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= VIEW 11: ADMIN DASHBOARD ================= -->
+    <section id="view-admin-dash" class="view-section hidden space-y-6">
+      <div class="flex flex-wrap items-center justify-between gap-4 pb-4 border-b border-slate-200">
+        <div>
+          <span class="text-xs font-bold text-purple-600 uppercase tracking-wider">Platform Administration</span>
+          <h2 class="text-2xl font-bold text-slate-900 mt-0.5">HEAL LINK Ecosystem Oversight</h2>
+          <p class="text-xs text-slate-500">Platform-wide metrics, vendor compliance, fleet sanitization audits, and system revenue.</p>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+        <div class="p-4 bg-white rounded-2xl border border-slate-200 shadow-xs">
+          <div class="text-xs text-slate-500">Total Patients</div>
+          <div class="text-xl font-black text-slate-900 mt-1" id="admin-stat-patients">184</div>
+        </div>
+        <div class="p-4 bg-white rounded-2xl border border-slate-200 shadow-xs">
+          <div class="text-xs text-slate-500">Verified Vendors</div>
+          <div class="text-xl font-black text-slate-900 mt-1" id="admin-stat-vendors">5</div>
+        </div>
+        <div class="p-4 bg-white rounded-2xl border border-slate-200 shadow-xs">
+          <div class="text-xs text-slate-500">Total Fleet Units</div>
+          <div class="text-xl font-black text-slate-900 mt-1" id="admin-stat-equipment">18</div>
+        </div>
+        <div class="p-4 bg-white rounded-2xl border border-slate-200 shadow-xs">
+          <div class="text-xs text-teal-600 font-semibold">Active Rentals</div>
+          <div class="text-xl font-black text-teal-700 mt-1" id="admin-stat-rentals">3</div>
+        </div>
+        <div class="p-4 bg-white rounded-2xl border border-slate-200 shadow-xs">
+          <div class="text-xs text-emerald-600 font-semibold">Total Revenue</div>
+          <div class="text-xl font-black text-emerald-700 mt-1" id="admin-stat-revenue">₹1,84,500</div>
+        </div>
+        <div class="p-4 bg-white rounded-2xl border border-slate-200 shadow-xs">
+          <div class="text-xs text-red-600 font-semibold">Emergency Requests</div>
+          <div class="text-xl font-black text-red-700 mt-1" id="admin-stat-emergencies">2</div>
+        </div>
+      </div>
+
+      <div class="p-6 bg-white rounded-3xl border border-slate-200 shadow-xs">
+        <h4 class="text-sm font-bold text-slate-900 mb-2">Audit & Clinical Quality Assurance</h4>
+        <p class="text-xs text-slate-600 leading-relaxed">
+          HEAL LINK guarantees 100% adherence to ISO 13485 biomedical decontamination protocols. Every rental return is quarantined, sanitized with hospital-grade UV-C and hydrogen peroxide, functionally tested across 14 checkpoints, and certified before release.
+        </p>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ================= MODALS CONTAINER ================= -->
+
+  <!-- 1. Equipment Details Modal -->
+  <div id="equipment-detail-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 modal-backdrop">
+    <div class="bg-white rounded-3xl max-w-4xl w-full max-h-[92vh] overflow-y-auto shadow-2xl border border-slate-200" id="equipment-modal-content">
+    </div>
+  </div>
+
+  <!-- 2. QR Health Passport Modal -->
+  <div id="qr-passport-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 modal-backdrop">
+    <div class="bg-white rounded-3xl max-w-2xl w-full shadow-2xl border border-slate-200" id="qr-passport-content">
+    </div>
+  </div>
+
+  <!-- 3. Booking & Checkout Modal -->
+  <div id="booking-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 modal-backdrop">
+    <div class="bg-white rounded-3xl max-w-2xl w-full max-h-[92vh] overflow-y-auto shadow-2xl border border-slate-200" id="booking-modal-content">
+    </div>
+  </div>
+
+  <!-- 4. Live Order Tracking Modal -->
+  <div id="tracking-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 modal-backdrop">
+    <div class="bg-white rounded-3xl max-w-xl w-full max-h-[92vh] overflow-y-auto shadow-2xl border border-slate-200" id="tracking-modal-content">
+    </div>
+  </div>
+
+  <!-- ================= TOAST NOTIFICATION CONTAINER ================= -->
+  <div id="toast-container" class="fixed bottom-5 right-5 z-50 space-y-2 pointer-events-none">
+  </div>
+
+  <!-- Footer -->
+  <footer class="bg-slate-950 text-slate-400 text-xs mt-16 border-t border-slate-900 py-10">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-8 pb-8 border-b border-slate-900">
+        <div>
+          <div class="text-white font-black text-base flex items-center space-x-2">
+            <span class="w-6 h-6 rounded-lg bg-teal-500 text-slate-950 flex items-center justify-center text-xs">+</span>
+            <span>HEAL LINK</span>
+          </div>
+          <p class="text-slate-400 mt-2 text-xs leading-relaxed">
+            AI-powered medical equipment rental & home-care ecosystem. Plan. Find. Verify. Rent. Deliver. Return.
+          </p>
+        </div>
+        <div>
+          <div class="text-white font-bold mb-2">Core Services</div>
+          <ul class="space-y-1 text-slate-400">
+            <li>• Respiratory Care Rentals</li>
+            <li>• ICU Beds & Mattresses</li>
+            <li>• Mobility & Wheelchairs</li>
+            <li>• Patient Vital Monitoring</li>
+          </ul>
+        </div>
+        <div>
+          <div class="text-white font-bold mb-2">Home Healthcare</div>
+          <ul class="space-y-1 text-slate-400">
+            <li>• ICU Nurse on Call</li>
+            <li>• Ortho Physiotherapist</li>
+            <li>• Senior Teleconsultation</li>
+            <li>• Biomedical Equipment Setup</li>
+          </ul>
+        </div>
+        <div>
+          <div class="text-white font-bold mb-2">Safety Disclaimer</div>
+          <p class="text-[11px] text-slate-500 leading-normal">
+            Recommendations provided by HEAL LINK are for informational purposes. Consult certified healthcare practitioners before finalizing clinical equipment.
+          </p>
+        </div>
+      </div>
+      <div class="mt-6 flex flex-wrap items-center justify-between text-[11px] text-slate-500">
+        <div>© 2026 HEAL LINK. All rights reserved. Demo Prototype.</div>
+        <div class="flex space-x-4">
+          <span>Terms of Service</span>
+          <span>Privacy Policy</span>
+          <span>ISO 13485 Compliance</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Core JavaScript -->
+  <script src="/static/js/app.js"></script>
+</body>
+</html>
