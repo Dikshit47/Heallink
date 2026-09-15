@@ -1,3 +1,355 @@
+
+// ---------------- Client-Side Cloud Demo Interceptor ----------------
+// Ensures 100% functionality on Streamlit Cloud, static hosting, and iframes when backend is detached.
+const CLIENT_EQUIPMENT_DATA = [{"id": "HL-OXY-1024", "name": "Medical Oxygen Concentrator (10 LPM High Flow)", "category": "Respiratory", "image_url": "https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?auto=format&fit=crop&w=600&q=80", "short_desc": "Dual-flow continuous oxygen delivery up to 10 L/min with digital purity sensor (93% +/- 3%).", "full_desc": "Hospital-grade 10L oxygen concentrator engineered for patients with severe respiratory distress, post-COVID recovery, COPD, or hypoxemia. Features dual flowmeters, low-purity audio-visual alarm, integrated humidifier bottle slot, and ultra-quiet motor (<45 dB). Comes fully certified and pre-calibrated.", "daily_price": 399, "weekly_price": 1499, "monthly_price": 3999, "security_deposit": 2000, "delivery_fee": 199, "installation_fee": 150, "pickup_fee": 199, "buy_price": 58000, "trust_score": 96, "sanitization_score": 100, "functional_test_score": 98, "maintenance_score": 96, "certification_score": 100, "age_score": 90, "vendor_reliability_score": 95, "vendor_id": "VND-02", "vendor_name": "MedEquip Express Central", "vendor_distance_km": 2.5, "vendor_eta_mins": 30, "vendor_rating": 4.9, "availability": "In Stock", "serial_number": "HL-OXY-1024", "last_sanitized": "Today, 08:30 AM", "last_functional_test": "Passed (14-Point Gas Audit)", "last_maintenance": "10 Sept 2026", "certification_status": "ISO 13485 & CE Medical Verified", "condition_grade": "Grade A+ (Pristine Hospital Standard)", "rental_history_count": 5}, {"id": "HL-OXY-1025", "name": "Compact Portable Oxygen Concentrator (5 LPM)", "category": "Respiratory", "image_url": "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&w=600&q=80", "short_desc": "Lightweight 5-liter concentrator with internal lithium backup battery and rolling trolley.", "full_desc": "Designed for patient mobility and domestic recovery. Provides continuous 1-5 LPM medical-grade oxygen with whisper-quiet operation and built-in power surge safety. Ideal for elderly patients requiring supplemental oxygen at home.", "daily_price": 349, "weekly_price": 1299, "monthly_price": 3499, "security_deposit": 2000, "delivery_fee": 199, "installation_fee": 150, "pickup_fee": 199, "buy_price": 45000, "trust_score": 94, "sanitization_score": 98, "functional_test_score": 96, "maintenance_score": 94, "certification_score": 98, "age_score": 92, "vendor_reliability_score": 94, "vendor_id": "VND-01", "vendor_name": "PulseCare Home Logistics", "vendor_distance_km": 1.8, "vendor_eta_mins": 20, "vendor_rating": 4.9, "availability": "In Stock", "serial_number": "HL-OXY-1025", "last_sanitized": "Yesterday, 04:15 PM", "last_functional_test": "Passed (Purity 94.2%)", "last_maintenance": "08 Sept 2026", "certification_status": "ISO 13485 Verified", "condition_grade": "Grade A+ (Sanitized & Sealed)", "rental_history_count": 3}, {"id": "HL-CYL-3012", "name": "Jumbo Oxygen Cylinder (B-Type 47L) with Flowmeter", "category": "Respiratory", "image_url": "https://images.unsplash.com/photo-1583912267670-6575ad472688?auto=format&fit=crop&w=600&q=80", "short_desc": "Full medical oxygen cylinder with bullnose regulator, humidification unit, and trolley.", "full_desc": "High-capacity 47-liter pressurized medical oxygen cylinder for emergency backup and home ICU stabilization. Pressure-tested hydrostatic cylinder with twin safety valve and quick-connect nasal cannula.", "daily_price": 199, "weekly_price": 799, "monthly_price": 1899, "security_deposit": 1500, "delivery_fee": 249, "installation_fee": 100, "pickup_fee": 249, "buy_price": 14500, "trust_score": 95, "sanitization_score": 100, "functional_test_score": 97, "maintenance_score": 95, "certification_score": 100, "age_score": 88, "vendor_reliability_score": 93, "vendor_id": "VND-01", "vendor_name": "PulseCare Home Logistics", "vendor_distance_km": 1.8, "vendor_eta_mins": 20, "vendor_rating": 4.9, "availability": "In Stock", "serial_number": "HL-CYL-3012", "last_sanitized": "Today, 06:45 AM", "last_functional_test": "Passed (Hydrostatic & Valve Test)", "last_maintenance": "12 Sept 2026", "certification_status": "PESO & ISO Certified", "condition_grade": "Grade A (Refilled & Sealed)", "rental_history_count": 8}, {"id": "HL-BIP-4011", "name": "ResMed Lumis 150 VPAP Auto BiPAP Machine", "category": "Respiratory", "image_url": "https://images.unsplash.com/photo-1516549655169-df83a0774514?auto=format&fit=crop&w=600&q=80", "short_desc": "Non-invasive ventilator with intelligent backup rate (iVAPS) and heated humidification.", "full_desc": "Premium therapeutic BiPAP system for respiratory insufficiency, severe sleep apnea, and neuromuscular conditions. Features ClimateLineAir heated tubing, automatic leak compensation, and SD-card compliance reporting for treating pulmonologists.", "daily_price": 499, "weekly_price": 1999, "monthly_price": 5999, "security_deposit": 3000, "delivery_fee": 199, "installation_fee": 200, "pickup_fee": 199, "buy_price": 89000, "trust_score": 98, "sanitization_score": 100, "functional_test_score": 99, "maintenance_score": 98, "certification_score": 100, "age_score": 94, "vendor_reliability_score": 98, "vendor_id": "VND-02", "vendor_name": "MedEquip Express Central", "vendor_distance_km": 2.5, "vendor_eta_mins": 30, "vendor_rating": 4.9, "availability": "In Stock", "serial_number": "HL-BIP-4011", "last_sanitized": "14 Sept 2026", "last_functional_test": "Passed (Pressure Waveform Calibrated)", "last_maintenance": "05 Sept 2026", "certification_status": "US FDA 510(k) & CE Marked", "condition_grade": "Grade A+ (Sterilized Airway)", "rental_history_count": 4}, {"id": "HL-CPA-4022", "name": "Auto CPAP Device with Heated Humidifier", "category": "Respiratory", "image_url": "https://images.unsplash.com/photo-1584017911766-d451b3d0e843?auto=format&fit=crop&w=600&q=80", "short_desc": "Smart auto-adjusting pressure CPAP with quiet motor and sleep therapy analytics.", "full_desc": "Effective non-invasive therapy for obstructive sleep apnea. Features ramp mode, expiratory pressure relief (EPR), and ultra-soft nasal mask assembly for maximum night-time comfort.", "daily_price": 349, "weekly_price": 1399, "monthly_price": 3799, "security_deposit": 2000, "delivery_fee": 199, "installation_fee": 150, "pickup_fee": 199, "buy_price": 48000, "trust_score": 97, "sanitization_score": 100, "functional_test_score": 97, "maintenance_score": 96, "certification_score": 100, "age_score": 92, "vendor_reliability_score": 96, "vendor_id": "VND-03", "vendor_name": "CareFirst Medical Devices", "vendor_distance_km": 3.2, "vendor_eta_mins": 35, "vendor_rating": 4.8, "availability": "In Stock", "serial_number": "HL-CPA-4022", "last_sanitized": "13 Sept 2026", "last_functional_test": "Passed (Blower & Sensor Test)", "last_maintenance": "01 Sept 2026", "certification_status": "CE Class IIa Verified", "condition_grade": "Grade A+ (Disinfected)", "rental_history_count": 6}, {"id": "HL-NEB-5010", "name": "Heavy-Duty Compressor & Ultrasonic Nebulizer", "category": "Respiratory", "image_url": "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&w=600&q=80", "short_desc": "High nebulization rate (0.4 ml/min) with adult & pediatric masks and medication chamber.", "full_desc": "Durable piston compressor nebulizer for targeted aerosol medication delivery in asthma, bronchitis, and post-operative respiratory physiotherapy.", "daily_price": 79, "weekly_price": 299, "monthly_price": 699, "security_deposit": 500, "delivery_fee": 99, "installation_fee": 0, "pickup_fee": 99, "buy_price": 3800, "trust_score": 95, "sanitization_score": 100, "functional_test_score": 96, "maintenance_score": 94, "certification_score": 98, "age_score": 92, "vendor_reliability_score": 95, "vendor_id": "VND-01", "vendor_name": "PulseCare Home Logistics", "vendor_distance_km": 1.8, "vendor_eta_mins": 20, "vendor_rating": 4.9, "availability": "In Stock", "serial_number": "HL-NEB-5010", "last_sanitized": "Today, 10:00 AM", "last_functional_test": "Passed (Flow Rate Calibrated)", "last_maintenance": "11 Sept 2026", "certification_status": "ISO Medical Device 13485", "condition_grade": "Grade A+ (Sterile Packed)", "rental_history_count": 7}, {"id": "HL-SUC-6015", "name": "Electric Clinical Phlegm Suction Unit", "category": "Respiratory", "image_url": "https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?auto=format&fit=crop&w=600&q=80", "short_desc": "Oil-free vacuum pump with 1000ml autoclavable jar, antibacterial filter, and regulator.", "full_desc": "High negative pressure medical aspirator for tracheostomy care, sputum extraction, and airway clearance in bedridden or post-operative patients.", "daily_price": 149, "weekly_price": 599, "monthly_price": 1499, "security_deposit": 1000, "delivery_fee": 199, "installation_fee": 100, "pickup_fee": 199, "buy_price": 12500, "trust_score": 96, "sanitization_score": 100, "functional_test_score": 98, "maintenance_score": 95, "certification_score": 99, "age_score": 90, "vendor_reliability_score": 96, "vendor_id": "VND-03", "vendor_name": "CareFirst Medical Devices", "vendor_distance_km": 3.2, "vendor_eta_mins": 35, "vendor_rating": 4.8, "availability": "In Stock", "serial_number": "HL-SUC-6015", "last_sanitized": "12 Sept 2026", "last_functional_test": "Passed (Max Suction -0.075 MPa)", "last_maintenance": "04 Sept 2026", "certification_status": "CE Certified Class II", "condition_grade": "Grade A (Deep Sanitized)", "rental_history_count": 4}, {"id": "HL-BED-2048", "name": "3-Function Motorized Electric ICU Hospital Bed", "category": "Beds", "image_url": "https://images.unsplash.com/photo-1538108149393-fbbd81895907?auto=format&fit=crop&w=600&q=80", "short_desc": "Handheld remote control for Backrest elevation, Knee-rest elevation, and Bed Height adjustment.", "full_desc": "State-of-the-art motorized hospital bed designed for post-surgery orthopedic recovery, paralysis, or elderly palliative care. Features collapsible aluminum side guardrails, ABS head/foot boards, heavy-duty central locking castors, and emergency manual CPR release lever. Promotes independence and caregiver ergonomics.", "daily_price": 349, "weekly_price": 1299, "monthly_price": 3299, "security_deposit": 2500, "delivery_fee": 299, "installation_fee": 250, "pickup_fee": 299, "buy_price": 62000, "trust_score": 97, "sanitization_score": 100, "functional_test_score": 98, "maintenance_score": 97, "certification_score": 100, "age_score": 92, "vendor_reliability_score": 97, "vendor_id": "VND-02", "vendor_name": "MedEquip Express Central", "vendor_distance_km": 2.5, "vendor_eta_mins": 30, "vendor_rating": 4.9, "availability": "In Stock", "serial_number": "HL-BED-2048", "last_sanitized": "Today, 09:00 AM", "last_functional_test": "Passed (Motor Load & Limit Switches)", "last_maintenance": "09 Sept 2026", "certification_status": "ISO 9001 & IEC 60601-2-52", "condition_grade": "Grade A+ (Hospital Sanitized)", "rental_history_count": 3}, {"id": "HL-BED-2049", "name": "Deluxe 2-Function Manual Hospital Bed", "category": "Beds", "image_url": "https://images.unsplash.com/photo-1586773860418-d37222d8fce3?auto=format&fit=crop&w=600&q=80", "short_desc": "Dual smooth crank system for independent Backrest and Knee-rest adjustment.", "full_desc": "Sturdy epoxy powder-coated mild steel hospital bed. Equipped with drop-down safety side rails, IV pole attachment sockets, and lockable rubber wheels for effortless maneuverability.", "daily_price": 249, "weekly_price": 899, "monthly_price": 2299, "security_deposit": 1500, "delivery_fee": 299, "installation_fee": 150, "pickup_fee": 299, "buy_price": 32000, "trust_score": 95, "sanitization_score": 100, "functional_test_score": 96, "maintenance_score": 95, "certification_score": 98, "age_score": 90, "vendor_reliability_score": 94, "vendor_id": "VND-04", "vendor_name": "LifeLine Critical Care Logistics", "vendor_distance_km": 4.5, "vendor_eta_mins": 45, "vendor_rating": 4.7, "availability": "In Stock", "serial_number": "HL-BED-2049", "last_sanitized": "11 Sept 2026", "last_functional_test": "Passed (Mechanical Linkage Lubricated)", "last_maintenance": "02 Sept 2026", "certification_status": "ISO 13485 Verified", "condition_grade": "Grade A (Clean & Inspected)", "rental_history_count": 5}, {"id": "HL-MAT-2050", "name": "Medical Anti-Decubitus Air/Ripple Mattress with Pump", "category": "Beds", "image_url": "https://images.unsplash.com/photo-1512496015851-a90fb38ba796?auto=format&fit=crop&w=600&q=80", "short_desc": "Alternating pressure bubble cell pad prevents bedsores and improves micro-circulation.", "full_desc": "Essential for bed-bound patients recovering from spine, hip, or neurological surgeries. The silent compressor operates 24/7 with alternating A-B air chambers that redistribute pressure every 6 minutes, preventing Stage 1-4 pressure ulcers.", "daily_price": 99, "weekly_price": 349, "monthly_price": 899, "security_deposit": 800, "delivery_fee": 149, "installation_fee": 0, "pickup_fee": 149, "buy_price": 4500, "trust_score": 98, "sanitization_score": 100, "functional_test_score": 99, "maintenance_score": 97, "certification_score": 100, "age_score": 96, "vendor_reliability_score": 98, "vendor_id": "VND-01", "vendor_name": "PulseCare Home Logistics", "vendor_distance_km": 1.8, "vendor_eta_mins": 20, "vendor_rating": 4.9, "availability": "In Stock", "serial_number": "HL-MAT-2050", "last_sanitized": "Today, 11:15 AM", "last_functional_test": "Passed (A-B Pressure Cycle Tested)", "last_maintenance": "13 Sept 2026", "certification_status": "CE Medical Device Directive", "condition_grade": "Grade A+ (Disinfected & Airtight)", "rental_history_count": 9}, {"id": "HL-WHL-1080", "name": "Ultra-Light Deluxe Foldable Wheelchair", "category": "Mobility", "image_url": "https://images.unsplash.com/photo-1576765608535-5f04d1e3f289?auto=format&fit=crop&w=600&q=80", "short_desc": "Aircraft-grade aluminum frame, swing-away footrests, and dual attendant handbrakes.", "full_desc": "Ergonomically designed for easy transport and car trunk storage. Weighs only 11 kg yet supports up to 125 kg patient weight. Breathable antimicrobial mesh seat cushions with puncture-proof polyurethane rear wheels.", "daily_price": 119, "weekly_price": 549, "monthly_price": 1399, "security_deposit": 1000, "delivery_fee": 149, "installation_fee": 0, "pickup_fee": 149, "buy_price": 12500, "trust_score": 96, "sanitization_score": 100, "functional_test_score": 97, "maintenance_score": 96, "certification_score": 99, "age_score": 92, "vendor_reliability_score": 95, "vendor_id": "VND-02", "vendor_name": "MedEquip Express Central", "vendor_distance_km": 2.5, "vendor_eta_mins": 30, "vendor_rating": 4.9, "availability": "In Stock", "serial_number": "HL-WHL-1080", "last_sanitized": "Yesterday, 02:00 PM", "last_functional_test": "Passed (Brake Tension & Wheel Alignment)", "last_maintenance": "07 Sept 2026", "certification_status": "ISO 7176 Wheelchair Certified", "condition_grade": "Grade A+ (Pristine)", "rental_history_count": 8}, {"id": "HL-WHL-1085", "name": "High-Back Reclining Wheelchair with Commode", "category": "Mobility", "image_url": "https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?auto=format&fit=crop&w=600&q=80", "short_desc": "Full 180-degree reclining backrest, head support cushion, elevating leg rests, and toilet pan.", "full_desc": "Versatile multi-care wheelchair for patients who cannot sit upright for extended periods. Allows transforming from sitting to reclining bed position without transferring the patient.", "daily_price": 169, "weekly_price": 749, "monthly_price": 1899, "security_deposit": 1500, "delivery_fee": 199, "installation_fee": 50, "pickup_fee": 199, "buy_price": 18500, "trust_score": 95, "sanitization_score": 100, "functional_test_score": 96, "maintenance_score": 94, "certification_score": 98, "age_score": 91, "vendor_reliability_score": 95, "vendor_id": "VND-03", "vendor_name": "CareFirst Medical Devices", "vendor_distance_km": 3.2, "vendor_eta_mins": 35, "vendor_rating": 4.8, "availability": "In Stock", "serial_number": "HL-WHL-1085", "last_sanitized": "10 Sept 2026", "last_functional_test": "Passed (Hydraulic Recliner Checked)", "last_maintenance": "03 Sept 2026", "certification_status": "ISO 13485 Verified", "condition_grade": "Grade A (Clean & Serviced)", "rental_history_count": 4}, {"id": "HL-WLK-7010", "name": "Reciprocal Folding Adult Walker with Front Wheels", "category": "Mobility", "image_url": "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&w=600&q=80", "short_desc": "Dual-mode (reciprocal and fixed) height-adjustable walker with slip-resistant rubber tips.", "full_desc": "Crucial orthopedic rehabilitation aid following hip replacement, knee surgery, or stroke recovery. Lightweight anodized aluminum tubing with soft foam handgrips and one-touch fold button.", "daily_price": 49, "weekly_price": 199, "monthly_price": 499, "security_deposit": 500, "delivery_fee": 99, "installation_fee": 0, "pickup_fee": 99, "buy_price": 3200, "trust_score": 98, "sanitization_score": 100, "functional_test_score": 99, "maintenance_score": 98, "certification_score": 100, "age_score": 96, "vendor_reliability_score": 98, "vendor_id": "VND-01", "vendor_name": "PulseCare Home Logistics", "vendor_distance_km": 1.8, "vendor_eta_mins": 20, "vendor_rating": 4.9, "availability": "In Stock", "serial_number": "HL-WLK-7010", "last_sanitized": "Today, 07:00 AM", "last_functional_test": "Passed (Lock Mechanism & Load Test)", "last_maintenance": "14 Sept 2026", "certification_status": "ISO 11199 Walking Aids", "condition_grade": "Grade A+ (Sterilized Grips)", "rental_history_count": 12}, {"id": "HL-CMD-7020", "name": "Adjustable Bedside Commode Chair with Removable Bucket", "category": "Mobility", "image_url": "https://images.unsplash.com/photo-1512496015851-a90fb38ba796?auto=format&fit=crop&w=600&q=80", "short_desc": "Rust-resistant powder-coated frame with splash shield, lid, and padded armrests.", "full_desc": "Eliminates painful and dangerous post-surgery bathroom trips. Can be placed right next to the patient bed or positioned over standard toilet commodes as an elevated safety seat.", "daily_price": 59, "weekly_price": 249, "monthly_price": 599, "security_deposit": 500, "delivery_fee": 99, "installation_fee": 0, "pickup_fee": 99, "buy_price": 3500, "trust_score": 97, "sanitization_score": 100, "functional_test_score": 98, "maintenance_score": 97, "certification_score": 100, "age_score": 94, "vendor_reliability_score": 96, "vendor_id": "VND-02", "vendor_name": "MedEquip Express Central", "vendor_distance_km": 2.5, "vendor_eta_mins": 30, "vendor_rating": 4.9, "availability": "In Stock", "serial_number": "HL-CMD-7020", "last_sanitized": "Today, 08:00 AM", "last_functional_test": "Passed (Hygiene Disinfection Certified)", "last_maintenance": "10 Sept 2026", "certification_status": "Medical Sanitation Grade A", "condition_grade": "Grade A+ (Autoclaved Bucket)", "rental_history_count": 6}, {"id": "HL-CRU-7030", "name": "Ergonomic Lightweight Underarm Crutches (Pair)", "category": "Mobility", "image_url": "https://images.unsplash.com/photo-1576765608535-5f04d1e3f289?auto=format&fit=crop&w=600&q=80", "short_desc": "Dual height and handgrip push-button adjustments with thick TPR non-slip tips.", "full_desc": "High-tensile aluminum orthopedic crutches for non-weight-bearing recovery after lower limb fractures, knee arthroscopy, or ankle trauma.", "daily_price": 39, "weekly_price": 149, "monthly_price": 349, "security_deposit": 300, "delivery_fee": 99, "installation_fee": 0, "pickup_fee": 99, "buy_price": 1800, "trust_score": 99, "sanitization_score": 100, "functional_test_score": 100, "maintenance_score": 98, "certification_score": 100, "age_score": 98, "vendor_reliability_score": 99, "vendor_id": "VND-01", "vendor_name": "PulseCare Home Logistics", "vendor_distance_km": 1.8, "vendor_eta_mins": 20, "vendor_rating": 4.9, "availability": "In Stock", "serial_number": "HL-CRU-7030", "last_sanitized": "Today, 09:30 AM", "last_functional_test": "Passed (Stress Test 140kg)", "last_maintenance": "12 Sept 2026", "certification_status": "ISO 11334 Certified", "condition_grade": "Grade A+ (Sterilized)", "rental_history_count": 15}, {"id": "HL-MON-8010", "name": "Multi-Parameter 5-Para Patient Vital Signs Monitor", "category": "Monitoring", "image_url": "https://images.unsplash.com/photo-1516549655169-df83a0774514?auto=format&fit=crop&w=600&q=80", "short_desc": "12.1-inch color TFT display monitoring ECG, SpO2, NIBP, Respiration, and Temperature.", "full_desc": "Hospital ICU-standard vital sign monitor configured for home ICU setups. Features real-time visual and audio alarms, 72-hour trend review, arrhythmia detection, and rechargeable backup battery.", "daily_price": 299, "weekly_price": 1199, "monthly_price": 2999, "security_deposit": 2000, "delivery_fee": 199, "installation_fee": 150, "pickup_fee": 199, "buy_price": 42000, "trust_score": 97, "sanitization_score": 100, "functional_test_score": 98, "maintenance_score": 97, "certification_score": 100, "age_score": 93, "vendor_reliability_score": 97, "vendor_id": "VND-02", "vendor_name": "MedEquip Express Central", "vendor_distance_km": 2.5, "vendor_eta_mins": 30, "vendor_rating": 4.9, "availability": "In Stock", "serial_number": "HL-MON-8010", "last_sanitized": "13 Sept 2026", "last_functional_test": "Passed (NIBP & ECG Simulator Calibrated)", "last_maintenance": "06 Sept 2026", "certification_status": "IEC 60601-1 Medical Verified", "condition_grade": "Grade A+ (Calibrated)", "rental_history_count": 5}, {"id": "HL-PMP-8020", "name": "Precision Micro-Syringe Infusion Pump", "category": "Home ICU", "image_url": "https://images.unsplash.com/photo-1584017911766-d451b3d0e843?auto=format&fit=crop&w=600&q=80", "short_desc": "Accurate drug delivery (0.1 to 1500 ml/h) with occlusion sensor and dual CPU microprocessors.", "full_desc": "Essential for controlled administration of antibiotics, cardiac infusions, and parenteral medications at home. Compatible with 10ml, 20ml, 30ml, and 50/60ml standard syringes.", "daily_price": 199, "weekly_price": 799, "monthly_price": 1999, "security_deposit": 1500, "delivery_fee": 199, "installation_fee": 100, "pickup_fee": 199, "buy_price": 28000, "trust_score": 98, "sanitization_score": 100, "functional_test_score": 99, "maintenance_score": 97, "certification_score": 100, "age_score": 95, "vendor_reliability_score": 98, "vendor_id": "VND-04", "vendor_name": "LifeLine Critical Care Logistics", "vendor_distance_km": 4.5, "vendor_eta_mins": 45, "vendor_rating": 4.7, "availability": "In Stock", "serial_number": "HL-PMP-8020", "last_sanitized": "14 Sept 2026", "last_functional_test": "Passed (Flow Accuracy +/-2% Verified)", "last_maintenance": "07 Sept 2026", "certification_status": "CE Class IIb Certified", "condition_grade": "Grade A+ (Calibrated & Tested)", "rental_history_count": 3}, {"id": "HL-BPM-8030", "name": "Digital Upper-Arm Blood Pressure & Pulse Monitor", "category": "Monitoring", "image_url": "https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?auto=format&fit=crop&w=600&q=80", "short_desc": "Clinically validated oscillometric monitor with irregular heartbeat detection.", "full_desc": "Accurate and quick blood pressure tracking with large backlit LCD and memory storage for two family users.", "daily_price": 39, "weekly_price": 149, "monthly_price": 399, "security_deposit": 400, "delivery_fee": 99, "installation_fee": 0, "pickup_fee": 99, "buy_price": 2400, "trust_score": 96, "sanitization_score": 100, "functional_test_score": 97, "maintenance_score": 95, "certification_score": 98, "age_score": 92, "vendor_reliability_score": 95, "vendor_id": "VND-01", "vendor_name": "PulseCare Home Logistics", "vendor_distance_km": 1.8, "vendor_eta_mins": 20, "vendor_rating": 4.9, "availability": "In Stock", "serial_number": "HL-BPM-8030", "last_sanitized": "Today, 10:30 AM", "last_functional_test": "Passed (Pressure Accuracy Tested)", "last_maintenance": "11 Sept 2026", "certification_status": "AAMI/ESH Validated", "condition_grade": "Grade A+ (Sanitized)", "rental_history_count": 10}, {"id": "HL-GLU-8040", "name": "Continuous Blood Glucose Monitoring System", "category": "Monitoring", "image_url": "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&w=600&q=80", "short_desc": "No-coding glucometer kit with 5-second test time and 0.5 microliter blood sample.", "full_desc": "Supplied with sterile lancing device and 25 test strips for diabetic monitoring during home rehabilitation.", "daily_price": 49, "weekly_price": 199, "monthly_price": 499, "security_deposit": 500, "delivery_fee": 99, "installation_fee": 0, "pickup_fee": 99, "buy_price": 2900, "trust_score": 95, "sanitization_score": 100, "functional_test_score": 96, "maintenance_score": 94, "certification_score": 98, "age_score": 90, "vendor_reliability_score": 94, "vendor_id": "VND-05", "vendor_name": "Apex Home Health Hub", "vendor_distance_km": 5.2, "vendor_eta_mins": 50, "vendor_rating": 4.6, "availability": "In Stock", "serial_number": "HL-GLU-8040", "last_sanitized": "11 Sept 2026", "last_functional_test": "Passed (Control Solution Calibration)", "last_maintenance": "08 Sept 2026", "certification_status": "ISO 15197 In-Vitro Diagnostic", "condition_grade": "Grade A (Sterile)", "rental_history_count": 7}, {"id": "HL-ACC-9010", "name": "Post-Operative Hinged Knee Immobilizer & Brace", "category": "Accessories", "image_url": "https://images.unsplash.com/photo-1576765608535-5f04d1e3f289?auto=format&fit=crop&w=600&q=80", "short_desc": "Telescopic range-of-motion dial pins (0-120 degrees flexion) for ACL and knee surgery recovery.", "full_desc": "Medical-grade rehabilitation knee orthosis with breathable lining and quick-release safety buckles.", "daily_price": 49, "weekly_price": 179, "monthly_price": 449, "security_deposit": 500, "delivery_fee": 99, "installation_fee": 0, "pickup_fee": 99, "buy_price": 4500, "trust_score": 97, "sanitization_score": 100, "functional_test_score": 98, "maintenance_score": 96, "certification_score": 99, "age_score": 95, "vendor_reliability_score": 96, "vendor_id": "VND-02", "vendor_name": "MedEquip Express Central", "vendor_distance_km": 2.5, "vendor_eta_mins": 30, "vendor_rating": 4.9, "availability": "In Stock", "serial_number": "HL-ACC-9010", "last_sanitized": "Today, 09:15 AM", "last_functional_test": "Passed (Hinge Lock Verified)", "last_maintenance": "10 Sept 2026", "certification_status": "CE Class I Medical", "condition_grade": "Grade A+ (Fresh Washed & Sanitized)", "rental_history_count": 8}, {"id": "HL-ACC-9020", "name": "Orthopedic Rigid Cervical Collar & Lumbar Support Belt", "category": "Accessories", "image_url": "https://images.unsplash.com/photo-1512496015851-a90fb38ba796?auto=format&fit=crop&w=600&q=80", "short_desc": "Anatomical contour chin support and double-pull lumbar belt with flexible steel stays.", "full_desc": "Designed for cervical spine stabilization, lower back post-operative decompression, and sciatica relief.", "daily_price": 39, "weekly_price": 149, "monthly_price": 399, "security_deposit": 400, "delivery_fee": 99, "installation_fee": 0, "pickup_fee": 99, "buy_price": 3200, "trust_score": 98, "sanitization_score": 100, "functional_test_score": 99, "maintenance_score": 97, "certification_score": 100, "age_score": 97, "vendor_reliability_score": 98, "vendor_id": "VND-03", "vendor_name": "CareFirst Medical Devices", "vendor_distance_km": 3.2, "vendor_eta_mins": 35, "vendor_rating": 4.8, "availability": "In Stock", "serial_number": "HL-ACC-9020", "last_sanitized": "Yesterday, 03:30 PM", "last_functional_test": "Passed (Tensile & Velcro Integrity)", "last_maintenance": "12 Sept 2026", "certification_status": "ISO Medical Quality", "condition_grade": "Grade A+ (Sterilized)", "rental_history_count": 11}];
+
+const originalFetch = window.fetch;
+window.fetch = async function(url, options) {
+  try {
+    const res = await originalFetch(url, options);
+    if (res.ok) return res;
+    throw new Error("API unreachable: " + res.status);
+  } catch (err) {
+    const data = handleClientMockApi(url.toString(), options);
+    return {
+      ok: true,
+      status: 200,
+      json: async () => data,
+      text: async () => JSON.stringify(data)
+    };
+  }
+};
+
+function handleClientMockApi(url, options) {
+  const urlObj = new URL(url, window.location.origin);
+  const path = urlObj.pathname;
+  const params = urlObj.searchParams;
+
+  // 1. GET /api/equipment
+  if (path === "/api/equipment") {
+    let items = [...CLIENT_EQUIPMENT_DATA];
+    const cat = params.get("category");
+    const q = params.get("search");
+    const sort = params.get("sort_by");
+
+    if (cat && cat.toLowerCase() !== "all") {
+      items = items.filter(it => it.category.toLowerCase() === cat.toLowerCase());
+    }
+    if (q) {
+      const query = q.toLowerCase();
+      items = items.filter(it => it.name.toLowerCase().includes(query) || it.short_desc.toLowerCase().includes(query));
+    }
+    if (sort === "price_asc") items.sort((a, b) => a.daily_price - b.daily_price);
+    else if (sort === "price_desc") items.sort((a, b) => b.daily_price - a.daily_price);
+    else if (sort === "eta_asc") items.sort((a, b) => a.vendor_eta_mins - b.vendor_eta_mins);
+    else items.sort((a, b) => b.trust_score - a.trust_score);
+
+    return { status: "success", count: items.length, data: items };
+  }
+
+  // 2. GET /api/equipment/{id}
+  if (path.startsWith("/api/equipment/")) {
+    const id = path.replace("/api/equipment/", "");
+    const eq = CLIENT_EQUIPMENT_DATA.find(e => e.id === id) || CLIENT_EQUIPMENT_DATA[0];
+    return {
+      status: "success",
+      equipment: eq,
+      pricing_breakdown: {
+        daily: { rental_rate: eq.daily_price, total_payable_today: eq.daily_price + eq.delivery_fee + eq.installation_fee + eq.pickup_fee + eq.security_deposit },
+        weekly: { rental_rate: eq.weekly_price, total_payable_today: eq.weekly_price + eq.delivery_fee + eq.installation_fee + eq.pickup_fee + eq.security_deposit },
+        monthly: { rental_rate: eq.monthly_price, total_payable_today: eq.monthly_price + eq.delivery_fee + eq.installation_fee + eq.pickup_fee + eq.security_deposit }
+      },
+      trust_breakdown: {
+        overall_score: eq.trust_score,
+        sanitization: eq.sanitization_score,
+        functional_test: eq.functional_test_score,
+        maintenance: eq.maintenance_score,
+        certification: eq.certification_score,
+        equipment_age: eq.age_score,
+        vendor_reliability: eq.vendor_reliability_score
+      },
+      health_passport: {
+        equipment_id: eq.id,
+        serial_number: eq.serial_number,
+        name: eq.name,
+        last_sanitized: eq.last_sanitized,
+        last_functional_test: eq.last_functional_test,
+        last_maintenance: eq.last_maintenance,
+        certification_status: eq.certification_status,
+        condition_grade: eq.condition_grade,
+        rental_history_count: eq.rental_history_count,
+        disclaimer: "This prototype uses simulated verified equipment records for demonstration."
+      }
+    };
+  }
+
+  // 3. POST /api/ai/care-twin
+  if (path === "/api/ai/care-twin") {
+    const body = options && options.body ? JSON.parse(options.body) : { query: "hip surgery" };
+    const query = (body.query || "").toLowerCase();
+    const isRespiratory = query.includes("oxygen") || query.includes("bipap") || query.includes("lung") || query.includes("breath");
+
+    if (isRespiratory) {
+      return {
+        status: "success",
+        journey: {
+          user_query: body.query,
+          estimated_duration_days: 30,
+          condition_title: "Cardiopulmonary & Respiratory Home Support",
+          patient_type: "Respiratory Care Patient",
+          phases: [
+            { phase: "Weeks 1–2: High-Flow Oxygen & Airway Stabilization", focus: "Target oxygen saturation SpO2 > 94%", equipment: [{ id: "HL-OXY-1024", name: "Medical Oxygen Concentrator 10L", reason: "Continuous 93% pure oxygen flow" }, { id: "HL-BIP-4011", name: "ResMed Auto BiPAP", reason: "Non-invasive ventilation" }], care_actions: ["Check humidifier distilled water twice daily", "Monitor SpO2 continuously"] },
+            { phase: "Weeks 3–4: Titration & Pulmonary Rehabilitation", focus: "Gradual tapering", equipment: [{ id: "HL-NEB-5010", name: "Ultrasonic Nebulizer", reason: "Aerosol bronchodilator delivery" }], care_actions: ["Deep-breathing incentive spirometer drills"] }
+          ],
+          recommended_bundle_key: "respiratory_bundle",
+          disclaimer: "Recommendations are informational and should not replace advice from a qualified healthcare professional."
+        },
+        bundle: {
+          title: "RESPIRATORY & PULMONARY CARE BUNDLE",
+          tagline: "Intensive oxygenation and airway stabilization kit.",
+          items: [
+            { id: "HL-OXY-1024", name: "Medical Oxygen Concentrator 10L", monthly_price: 3999, daily_price: 399, why: "Continuous hospital-grade high-flow oxygen 24/7." },
+            { id: "HL-CYL-3012", name: "Jumbo Oxygen Cylinder (47L)", monthly_price: 1899, daily_price: 199, why: "Zero-electricity emergency backup in power outages." },
+            { id: "HL-NEB-5010", name: "Ultrasonic Compressor Nebulizer", monthly_price: 699, daily_price: 79, why: "Direct aerosol bronchodilator medication delivery." }
+          ],
+          individual_total_monthly: 6597,
+          bundle_price_monthly: 4999,
+          savings_monthly: 1598,
+          savings_pct: 24
+        }
+      };
+    }
+
+    return {
+      status: "success",
+      journey: {
+        user_query: body.query,
+        estimated_duration_days: 45,
+        condition_title: "Post-Orthopedic / Hip Surgery Recovery",
+        patient_type: "Orthopedic Surgery Patient",
+        phases: [
+          { phase: "Weeks 1–2: Acute Recovery & Fall Prevention", focus: "Pain management and zero-strain transfers.", equipment: [{ id: "HL-BED-2048", name: "3-Function Motorized Electric ICU Bed", reason: "Controlled elevation prevents hip joint strain" }, { id: "HL-WLK-7010", name: "Reciprocal Folding Adult Walker", reason: "Mandatory bilateral stability for safe walking" }, { id: "HL-CMD-7020", name: "Bedside Commode Chair", reason: "Eliminates dangerous bathroom slips" }], care_actions: ["Perform seated ankle pumps every 2 hours", "Ensure commode seat is adjusted higher than knees"] },
+          { phase: "Weeks 3–4: Progressive Mobility & Gait Training", focus: "Active quadriceps activation & assisted walking.", equipment: [{ id: "HL-WLK-7010", name: "Reciprocal Folding Walker", reason: "Progressive gait retraining" }, { id: "HL-WHL-1080", name: "Ultra-Light Wheelchair", reason: "Safe transport for doctor follow-ups" }], care_actions: ["Physiotherapy home visit 3x weekly", "Practice smooth sit-to-stand transitions"] },
+          { phase: "Weeks 5–6: Functional Independence & Safe Equipment Weaning", focus: "Independent walking & scheduled equipment return.", equipment: [{ id: "HL-CRU-7030", name: "Ergonomic Crutches", reason: "Optional transition before full recovery" }], care_actions: ["Schedule HealLink pickup for Bed & Commode", "Final home hazard audit"] }
+        ],
+        recommended_bundle_key: "post_surgery_bundle",
+        disclaimer: "Recommendations are informational and should not replace advice from a qualified healthcare professional."
+      },
+      bundle: {
+        title: "POST-SURGERY HOME CARE BUNDLE",
+        tagline: "Complete clinical recovery suite for hip, knee, or spine surgery.",
+        items: [
+          { id: "HL-BED-2048", name: "3-Function Motorized Electric Hospital Bed", monthly_price: 3299, daily_price: 349, why: "Crucial for controlled elevation without stressing hip/knee joints." },
+          { id: "HL-MAT-2050", name: "Medical Anti-Decubitus Air Mattress", monthly_price: 899, daily_price: 99, why: "Prevents painful bedsores by alternating pressure chambers." },
+          { id: "HL-WLK-7010", name: "Reciprocal Folding Adult Walker with Wheels", monthly_price: 499, daily_price: 49, why: "Provides rigid bilateral balance and weight offloading." },
+          { id: "HL-CMD-7020", name: "Adjustable Bedside Commode Chair", monthly_price: 599, daily_price: 59, why: "Prevents dangerous slip falls during night bathroom trips." }
+        ],
+        individual_total_monthly: 5296,
+        bundle_price_monthly: 3999,
+        savings_monthly: 1297,
+        savings_pct: 25
+      }
+    };
+  }
+
+  // 4. GET /api/ai/bundle/{key}
+  if (path.startsWith("/api/ai/bundle/")) {
+    const key = path.replace("/api/ai/bundle/", "");
+    if (key === "respiratory_bundle") {
+      return {
+        status: "success",
+        bundle: {
+          title: "RESPIRATORY & PULMONARY CARE BUNDLE",
+          tagline: "Intensive oxygenation and airway stabilization kit.",
+          items: [
+            { id: "HL-OXY-1024", name: "Medical Oxygen Concentrator 10L", monthly_price: 3999, daily_price: 399, why: "Continuous hospital-grade high-flow oxygen 24/7." },
+            { id: "HL-CYL-3012", name: "Jumbo Oxygen Cylinder (47L)", monthly_price: 1899, daily_price: 199, why: "Vital zero-electricity emergency backup in power outage." },
+            { id: "HL-NEB-5010", name: "Heavy-Duty Compressor & Nebulizer", monthly_price: 699, daily_price: 79, why: "Direct aerosol medication delivery for bronchodilation." }
+          ],
+          individual_total_monthly: 6597,
+          bundle_price_monthly: 4999,
+          savings_monthly: 1598,
+          savings_pct: 24
+        }
+      };
+    }
+    return {
+      status: "success",
+      bundle: {
+        title: "POST-SURGERY HOME CARE BUNDLE",
+        tagline: "Complete clinical recovery suite for post-surgery rehabilitation.",
+        items: [
+          { id: "HL-BED-2048", name: "3-Function Motorized Electric Hospital Bed", monthly_price: 3299, daily_price: 349, why: "Controlled elevation prevents joint strain." },
+          { id: "HL-MAT-2050", name: "Medical Anti-Decubitus Air Mattress", monthly_price: 899, daily_price: 99, why: "Alternating air cells prevent pressure sores." },
+          { id: "HL-WLK-7010", name: "Reciprocal Folding Adult Walker with Wheels", monthly_price: 499, daily_price: 49, why: "Rigid bilateral balance and fall prevention." },
+          { id: "HL-CMD-7020", name: "Adjustable Bedside Commode Chair", monthly_price: 599, daily_price: 59, why: "Safe private toilet transfer beside bed." }
+        ],
+        individual_total_monthly: 5296,
+        bundle_price_monthly: 3999,
+        savings_monthly: 1297,
+        savings_pct: 25
+      }
+    };
+  }
+
+  // 5. POST /api/ai/rent-vs-buy
+  if (path === "/api/ai/rent-vs-buy") {
+    const body = options && options.body ? JSON.parse(options.body) : { duration_days: 45 };
+    const days = body.duration_days || 45;
+    const eq = CLIENT_EQUIPMENT_DATA.find(e => e.id === body.equipment_id) || CLIENT_EQUIPMENT_DATA[0];
+    const months = Math.floor(days / 30);
+    const extra = days % 30;
+    const rentTotal = (months * eq.monthly_price) + Math.min(extra * eq.daily_price, eq.monthly_price) + 398;
+    const netBuy = Math.floor(eq.buy_price * 0.45);
+    const rentToOwn = Math.floor(eq.buy_price * 1.15) - Math.floor(rentTotal * 0.7) + rentTotal;
+    const best = days <= 90 ? "RENT" : "BUY";
+
+    return {
+      status: "success",
+      calculation: {
+        duration_days: days,
+        equipment_id: eq.id,
+        equipment_name: eq.name,
+        rent: { rental_subtotal: rentTotal - 398, logistics_fee: 398, total_rent_cost: rentTotal, label: "₹" + rentTotal.toLocaleString() },
+        buy: { retail_purchase_price: eq.buy_price, estimated_resale_value: eq.buy_price - netBuy, net_out_of_pocket: netBuy, label: "₹" + eq.buy_price.toLocaleString() + " (Net ₹" + netBuy.toLocaleString() + ")" },
+        rent_to_own: { accumulated_rent_credit: Math.floor(rentTotal * 0.7), total_plan_estimate: rentToOwn, label: "₹" + rentToOwn.toLocaleString() },
+        best_option: best,
+        explanation: `Renting is the most cost-effective decision for a ${days}-day requirement. You save ₹${(netBuy - rentTotal).toLocaleString()} compared to buying and dealing with maintenance and depreciation.`,
+        disclaimer: "Calculations are financial estimates for demo planning purposes and exclude local taxes."
+      }
+    };
+  }
+
+  // 6. GET /api/emergency/swarm
+  if (path === "/api/emergency/swarm") {
+    return {
+      status: "success",
+      swarm_vendors: [
+        { vendor_id: "VND-01", vendor_name: "PulseCare Home Logistics", equipment_name: "Medical Oxygen Concentrator (10 LPM)", distance_km: 1.8, eta_mins: 20, daily_price: 399, trust_score: 96, vendor_rating: 4.9, is_recommended_fastest: true },
+        { vendor_id: "VND-02", vendor_name: "MedEquip Express Central", equipment_name: "Medical Oxygen Concentrator (10 LPM)", distance_km: 2.5, eta_mins: 30, daily_price: 399, trust_score: 98, vendor_rating: 4.9, is_recommended_fastest: false },
+        { vendor_id: "VND-03", vendor_name: "CareFirst Medical Devices", equipment_name: "Portable Oxygen Concentrator (5 LPM)", distance_km: 3.2, eta_mins: 35, daily_price: 349, trust_score: 94, vendor_rating: 4.8, is_recommended_fastest: false }
+      ],
+      disclaimer: "Emergency mode is a logistics-assistance feature and does not replace emergency medical services. In a medical emergency, contact 112 immediately."
+    };
+  }
+
+  // 7. POST /api/emergency/book
+  if (path === "/api/emergency/book") {
+    return {
+      status: "success",
+      request_ref: "EMG-9921",
+      message: "Emergency swarm alert dispatched! Equipment en route. Estimated arrival in 20 minutes.",
+      eta_mins: 20
+    };
+  }
+
+  // 8. POST /api/bookings
+  if (path === "/api/bookings") {
+    const ref = "HL-BK-" + Math.floor(1000 + Math.random() * 9000);
+    return {
+      status: "success",
+      booking_ref: ref,
+      breakdown: { total_payable_today: 6647 }
+    };
+  }
+
+  // 9. GET /api/orders/...
+  if (path.startsWith("/api/orders/")) {
+    const stages = [
+      { stage: 1, title: "Order Confirmed", desc: "Payment authorized & reservation booked." },
+      { stage: 2, title: "Equipment Verified", desc: "Biomedical technician inspection & serial allocated." },
+      { stage: 3, title: "Sanitized & Sealed", desc: "Hospital disinfection protocol completed." },
+      { stage: 4, title: "Dispatched", desc: "En route in specialized delivery vehicle." },
+      { stage: 5, title: "Out for Delivery", desc: "Technician arriving at residence." },
+      { stage: 6, title: "Delivered", desc: "Equipment unloaded and inspected." },
+      { stage: 7, title: "Installation Completed", desc: "Setup, circuit testing, and family demo done." }
+    ];
+    let cur = window._demoTrackingStage || 4;
+    if (path.includes("advance-stage")) {
+      cur = Math.min(7, cur + 1);
+      window._demoTrackingStage = cur;
+      return { status: "success", current_stage: cur, stage_title: stages[cur - 1].title };
+    }
+    return {
+      status: "success",
+      order: { booking_ref: "HL-BK-9403", equipment_name: "Medical Oxygen Concentrator (10 LPM)", patient_name: "Rajesh Kumar", tracking_stage: cur },
+      stages: stages,
+      current_stage: cur
+    };
+  }
+
+  // 10. GET /api/family
+  if (path === "/api/family") {
+    return {
+      status: "success",
+      patient: { name: "Rajesh Kumar", relation: "Father (Patient)", condition: "Post-Hip Surgery Recovery", age: 68 },
+      caregivers: [
+        { name: "Ananya Kumar", relation: "Daughter (Primary Caregiver)" },
+        { name: "Rohan Kumar", relation: "Son (Secondary Caregiver)" }
+      ],
+      active_rentals: [
+        { booking_ref: "HL-BK-9401", equipment_name: "3-Function Motorized Electric ICU Hospital Bed", days_remaining: 29, expiry_date: "14 Oct 2026", patient_address: "Flat 402, Sunrise Heights" },
+        { booking_ref: "HL-BK-9402", equipment_name: "Reciprocal Folding Adult Walker with Wheels", days_remaining: 24, expiry_date: "09 Oct 2026", patient_address: "Flat 402, Sunrise Heights" }
+      ],
+      care_schedule: [
+        { service: "Orthopedic Physiotherapy", provider: "Dr. Rohit Verma (PT)", date: "Tomorrow, 10:30 AM", type: "Home Visit", badge: "Confirmed" },
+        { service: "Certified ICU Nurse Shift", provider: "Sister Sunita R.", date: "Daily (08:00 AM - 08:00 PM)", type: "Bedside Nursing", badge: "Active" }
+      ]
+    };
+  }
+
+  // 11. Return Inspections
+  if (path.startsWith("/api/return-inspections")) {
+    const pStages = [
+      { name: "Returned" }, { name: "Inspection" }, { name: "Deep Cleaning" },
+      { name: "Disinfection" }, { name: "Functional Test" }, { name: "Technician Sign-off" }, { name: "Ready for Rental" }
+    ];
+    if (path.includes("advance")) {
+      return { status: "success", stage_name: "Deep Cleaning & Disinfection" };
+    }
+    return {
+      status: "success",
+      pipeline_stages: pStages,
+      inspections: [
+        { inspection_ref: "INS-7801", equipment_name: "ResMed Lumis 150 VPAP Auto BiPAP", serial_number: "SN-BIP-9921", current_stage: 3, stage_name: "Deep Cleaning & Disinfection", notes: "Filter replaced, ultrasonic chamber sanitized", technician_name: "Tech. Vikram Rao", status: "In Process" },
+        { inspection_ref: "INS-7802", equipment_name: "Deluxe 2-Function Manual Hospital Bed", serial_number: "SN-BED-4410", current_stage: 5, stage_name: "Technician Verification", notes: "Crank gears greased, welds inspected", technician_name: "Tech. Suresh Nair", status: "Pending Sign-off" },
+        { inspection_ref: "INS-7803", equipment_name: "Compact Portable Oxygen Concentrator", serial_number: "SN-OXY-3382", current_stage: 7, stage_name: "Ready for Next Rental", notes: "Passed 14-point purity audit (94.4%)", technician_name: "Tech. Vikram Rao", status: "Certified Ready" }
+      ]
+    };
+  }
+
+  // 12. Vendor Inventory
+  if (path === "/api/vendor/inventory") {
+    return {
+      status: "success",
+      stats: { total_units: CLIENT_EQUIPMENT_DATA.length, in_stock: 14, rented: 3, maintenance: 1 },
+      inventory: CLIENT_EQUIPMENT_DATA
+    };
+  }
+
+  if (path.startsWith("/api/vendor/equipment/")) {
+    return { status: "success", new_status: "Updated" };
+  }
+
+  // 13. Admin Metrics
+  if (path === "/api/admin/metrics") {
+    return {
+      status: "success",
+      metrics: {
+        total_patients: 184,
+        total_vendors: 5,
+        total_equipment: CLIENT_EQUIPMENT_DATA.length,
+        active_rentals: 3,
+        monthly_revenue: "₹1,84,500",
+        emergency_requests: 2
+      }
+    };
+  }
+
+  return { status: "success" };
+}
+
+
 /**
  * HEAL LINK - Main Application Script
  * Orchestrates navigation, AI Care Twin, transparent pricing, emergency swarm, QR passport, and dashboards.
